@@ -1,0 +1,131 @@
+body 
+{
+    margin:0;
+    padding:0;
+    background:#fff url('../images/pinstripes.png');
+}
+
+#content
+{
+    display:block;
+    padding:0px 20px 10px 0px;
+    margin:0 10px 0 10px;
+}
+
+a { text-decoration:none; }
+
+#content ul
+{
+    list-style:none;
+    padding:0px;
+}
+
+#content ul li
+{
+    display:block;
+    border:solid 1px #000;
+    margin-bottom:10px;
+    padding:0px;
+    border-radius:8px;
+    box-shadow: 3px 3px 2px #888888;
+    background-color:#44eb1e;
+}
+
+#content ul li.add
+{
+    background: #44eb1e url('../images/add.png') no-repeat;
+    background-position:8px 7px;
+}
+
+#content ul li.view
+{
+    background: #44eb1e url('../images/view.png') no-repeat;
+    background-position:8px 7px;
+}
+
+#content ul li.close
+{
+    background: #44eb1e url('../images/delete.png') no-repeat;
+    background-position:8px 7px;
+}
+
+#content ul li a
+{
+    display:block;
+    padding:12px 14px 12px 50px;
+    text-transform:uppercase;
+    font-size:14pt;
+    border-radius:8px;
+    color:#fff;
+}
+
+h1
+{
+    display:block;
+    background-color:#000;
+    margin:0 0 10px 0;
+    padding:5px;
+    color:#fff;
+    text-align:center;
+}
+
+h4
+{
+    margin:0px;
+    color:#D54937;
+    margin:10px 0 5px 0;
+    font-size:16pt;
+}
+
+input[type=button]
+{
+    padding:8px 5px;
+    margin: 10px 10px 10px 0;
+}
+
+.field
+{
+    display:block;
+    border:solid 1px #DFDFDF;
+    padding:10px;
+    width:100%;
+    font-size:16pt;
+    margin-right:10px!important;
+}
+
+select { padding:10px!important; }
+
+.result
+{
+    display:none;
+    font-size:16pt;
+}
+
+footer
+{
+    display:block;
+    margin-top:20px;
+    padding:10px;
+}
+
+footer a 
+{
+    color:blue;
+    text-decoration:none;
+}
+
+.balance
+{
+    display:block;
+    font-size:16pt;
+    background-color:#000;
+    color:#fff;
+    padding:12px 12px 12px 48px;
+    font-weight:bold;
+    margin:15px 0;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    border-radius:8px;
+    box-shadow: 3px 3px 2px #888888;
+
+}
