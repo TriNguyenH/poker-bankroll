@@ -2,60 +2,61 @@ body
 {
     margin:0;
     padding:0;
-    background:#fff url('../images/pinstripes.png');
+    background-color:#cefdd5;
 }
 
 #content
 {
     display:block;
-    padding:0px 20px 10px 0px;
+    padding:0px 10px 10px 0px;
     margin:0 10px 0 10px;
 }
 
 a { text-decoration:none; }
 
-#content ul
+#content ul.nav
 {
     list-style:none;
-    padding:0px;
+    padding:0;
+    margin:0;
 }
 
-#content ul li
+#content ul.nav li
 {
     display:block;
-    border:solid 1px #000;
+    border:solid 1px #7EBB4E;
     margin-bottom:10px;
     padding:0px;
-    border-radius:8px;
+    border-radius:5px;
     box-shadow: 3px 3px 2px #888888;
-    background-color:#44eb1e;
+    background-color:#7EBB4E;
 }
 
-#content ul li.add
+#content ul.nav li.add
 {
-    background: #44eb1e url('../images/add.png') no-repeat;
+    background: #7EBB4E url('../images/add.png') no-repeat;
     background-position:8px 7px;
 }
 
-#content ul li.view
+#content ul.nav li.view
 {
-    background: #44eb1e url('../images/view.png') no-repeat;
+    background: #7EBB4E url('../images/view.png') no-repeat;
     background-position:8px 7px;
 }
 
-#content ul li.close
+#content ul.nav li.close
 {
-    background: #44eb1e url('../images/delete.png') no-repeat;
+    background: #7EBB4E url('../images/delete.png') no-repeat;
     background-position:8px 7px;
 }
 
-#content ul li a
+#content ul.nav li a
 {
     display:block;
     padding:12px 14px 12px 50px;
     text-transform:uppercase;
     font-size:14pt;
-    border-radius:8px;
+    border-radius:5px;
     color:#fff;
 }
 
@@ -69,6 +70,7 @@ h1
     text-align:center;
 }
 
+h2 {text-transform:uppercase;}
 h4
 {
     margin:0px;
@@ -86,7 +88,7 @@ input[type=button]
 .field
 {
     display:block;
-    border:solid 1px #DFDFDF;
+    border:solid 1px #b1beb3;
     padding:10px;
     width:100%;
     font-size:16pt;
@@ -120,12 +122,13 @@ footer a
     font-size:16pt;
     background-color:#000;
     color:#fff;
-    padding:12px 12px 12px 48px;
+    padding:20px 12px 20px 48px;
     font-weight:bold;
     margin:15px 0;
     text-transform:uppercase;
     letter-spacing:1px;
-    border-radius:8px;
+    border-radius:5px;
     box-shadow: 3px 3px 2px #888888;
+    border:solid 1px #fff;
 
 }
