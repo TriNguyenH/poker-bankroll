@@ -8,16 +8,22 @@
         <script type="text/javascript" src="scripts/main.js"></script>
     </head>
 <body>
+
     <h1>My Poker Bankroll</h1>
     
-    <div id="content">
+    <div id="content" style="margin-right:20px;">
 
-        <h2>ADD FUND</h2>
-        
-    
+        <h2>Create a Transaction</h2>        
+
         <h4>Enter Amount:</h4>
         <input type="text" id="amount" class="field" />
-        <input type="button" id="btnAddFund" value="Add Fund" />
+        
+        <h4>Enter Description:</h4>
+        <textarea id="description" class="field" rows="3"></textarea>
+        
+        <p>
+            <input type="button" id="btnAddFund" value="Submit" class="button" onclick="javascript:addFund();" />
+        </p>
 
     </div>
     

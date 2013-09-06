@@ -3,13 +3,14 @@ body
     margin:0;
     padding:0;
     background-color:#cefdd5;
+    overflow:hidden;
 }
 
 #content
 {
     display:block;
-    padding:0px 10px 10px 0px;
-    margin:0 10px 0 10px;
+    padding:0px 10px 10px 10px;
+    margin:0;
 }
 
 a { text-decoration:none; }
@@ -24,8 +25,7 @@ a { text-decoration:none; }
 #content ul.nav li
 {
     display:block;
-    border:solid 1px #7EBB4E;
-    margin-bottom:10px;
+    margin-bottom:15px;
     padding:0px;
     border-radius:5px;
     box-shadow: 3px 3px 2px #888888;
@@ -65,12 +65,18 @@ h1
     display:block;
     background-color:#000;
     margin:0 0 10px 0;
-    padding:5px;
+    padding:15px;
     color:#fff;
     text-align:center;
+    border-bottom:solid 1px #FEE318;
 }
 
-h2 {text-transform:uppercase;}
+h2 
+{
+    text-transform:uppercase;
+    color:#7EBB4E;
+}
+
 h4
 {
     margin:0px;
@@ -81,8 +87,13 @@ h4
 
 input[type=button]
 {
-    padding:8px 5px;
+    background-color: #7EBB4E;
+    border: medium none;
+    color: #FFFFFF;
+    font-weight: bold;
+    letter-spacing: 1px;
     margin: 10px 10px 10px 0;
+    padding: 8px 5px;
 }
 
 .field
@@ -124,11 +135,58 @@ footer a
     color:#fff;
     padding:20px 12px 20px 48px;
     font-weight:bold;
-    margin:15px 0;
+    margin:15px 0 20px 0;
     text-transform:uppercase;
     letter-spacing:1px;
     border-radius:5px;
     box-shadow: 3px 3px 2px #888888;
     border:solid 1px #fff;
 
+}
+
+table
+{
+    width:100%;
+    border-spacing:0;
+    border-collapse:collapse;
+}
+
+table tr
+{
+}
+
+table tr th
+{
+    background-color:#7EBB4E;
+    color:#fff;
+    padding:5px;
+}
+
+table tr td
+{
+}
+
+
+.button
+{
+    margin-top:25px;
+    text-transform:uppercase;
+}
+
+#transaction
+{
+    display:none;
+}
+
+#transaction.active
+{
+    border:dashed 1px red;
+    padding:10px;
+    margin-bottom:15px;
+}
+
+.stop
+{
+    background-color:Red!important;
+    font-weight:bold;
 }
