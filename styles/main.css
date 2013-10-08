@@ -205,3 +205,5 @@ table tr td.right { text-align:right; }
 .go-back { color:#58A80A; font-size:16pt; }
 
 .go-back img { height:25px; margin-bottom:-6px; }
+
+#ads { display:block; text-align:center; }
