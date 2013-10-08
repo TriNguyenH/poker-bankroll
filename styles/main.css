@@ -3,14 +3,14 @@ body
     margin:0;
     padding:0;
     background-color:#cefdd5;
-    overflow-x:hidden;
+    /*overflow-x:hidden;*/
 }
 
 #content
 {
     display:block;
     padding:0px 10px 10px 10px;
-    margin:85px 0 0 0;
+    margin:0;
 }
 
 a { text-decoration:none; }
@@ -78,6 +78,7 @@ h2
 {
     text-transform:uppercase;
     color:#7EBB4E;
+    margin:10px 0 0 0;
 }
 
 h4
@@ -152,6 +153,7 @@ table
     width:100%;
     border-spacing:0;
     border-collapse:collapse;
+    margin-top:10px;
 }
 
 table tr
@@ -163,12 +165,18 @@ table tr th
     background-color:#7EBB4E;
     color:#fff;
     padding:5px;
+    text-align:left;
 }
 
-table tr td
-{
-}
+table tr th.date { width:15%; text-align:right; }
 
+table tr th.hours { width:15%; text-align:right; }
+
+table tr th.amount { width:15%; text-align:right; }
+
+table tr td.left { text-align:left; }
+
+table tr td.right { text-align:right; }
 
 .button
 {
@@ -193,3 +201,7 @@ table tr td
     background-color:Red!important;
     font-weight:bold;
 }
+
+.go-back { color:#58A80A; font-size:16pt; }
+
+.go-back img { height:25px; margin-bottom:-6px; }

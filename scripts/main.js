@@ -1,4 +1,11 @@
+/************************************************************
+ * My Poker Bankroll                                        *
+ ***********************************************************/
 $(function() {
+
+    //document.addEventListener("deviceready", deviceready, true);
+
+    deviceready();
 
     getCurrentSession();
 
@@ -25,6 +32,90 @@ $(function() {
         }
     });
 });
+
+function deviceready() {
+    db = window.openDatabase("pokerbankroll", "1.0", "My Poker Bankroll", 1000000);
+    db.transaction(setupDB, errorHandler, dbReady);
+}
+
+function setupDB(tx) {
+    //Transactions
+    tx.executeSql('create table if not exists transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                  'amount FLOAT, type TEXT, created DATE)');
+
+    //Sessions
+    tx.executeSql('create table if not exists sessions(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                  'location TEXT, start_date DATE, hours FLOAT, amount FLOAT)');
+}
+
+function errorHandler(e) {
+    alert(e.message);
+}
+
+function dbReady() {
+
+    $('#btnAddTransaction').on("click", function(e) {
+        db.transaction(function(tx) {
+            var d = new Date();
+            d.setDate(d.getDate() - randRange(1, 30));
+            var amount = parseFloat($('#amount').val());
+            var description = "test";
+            tx.executeSql("insert into transactions(amount, type) value(?,?,?)", [amount, description]);
+        }, errorHandler, function() { alert("added"); });
+    });
+
+    $('#clearButton').on("touchstart", function(e) {
+        db.transaction(function(tx) {
+            tx.executeSql("delete from log");
+        }, errorHandler, function() { $("#result").html("Cleared all rows."); });
+    });
+
+    $("#ShowButton").on("touchstart", function(e) {
+        db.transaction(function(tx) {
+            tx.executeSql("select * from log order by created desc", [], gotLog, errorHandler);
+        }, errorHandler, function() { });
+    });
+}
+
+function gotLog(tx, results) {
+    if (results.rows.length == 0) {
+        $("#result").html("No data.");
+        return false;
+    }
+
+    var s = "";
+
+    for (var i = 0; i < results.rows.length; i++) {
+        var d = new Date();
+        d.setTime(results.rows.item(i).created);
+        s += d.toDateString() + " " + d.toTimeString() + "<br/>";
+    }
+
+    $("#result").html(s);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getCurrentSession() {
     $hasCurrentSession = true;
