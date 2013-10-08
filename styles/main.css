@@ -206,4 +206,4 @@ table tr td.right { text-align:right; }
 
 .go-back img { height:25px; margin-bottom:-6px; }
 
-#ads { display:block; text-align:center; }
+#ads { display:block; position:absolute; bottom:0; }
