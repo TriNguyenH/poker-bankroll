@@ -168,15 +168,24 @@ table tr th
     text-align:left;
 }
 
-table tr th.date { width:15%; text-align:right; }
+table tr th.action, table tr td.action { width:35px!important; padding-left:10px; }
+table tr td.action img {margin-bottom:-4px;}
+
+table tr th.date, table tr td.date { width:15%; text-align:right; padding-right:15px; }
 
 table tr th.hours { width:15%; text-align:right; }
 
 table tr th.amount { width:15%; text-align:right; }
 
+table tr td { padding:5px; }
+
 table tr td.left { text-align:left; }
 
 table tr td.right { text-align:right; }
+
+.bgcolor0 { background-color:#fff; }
+
+.bgcolor1 { background-color:Gray; }
 
 .button
 {
@@ -202,8 +211,21 @@ table tr td.right { text-align:right; }
     font-weight:bold;
 }
 
+.error
+{
+    display:block;
+    margin:10px 0 10px 0;
+    color:red;
+    background-color:#fff;
+    padding:10px;
+}
+
+.required { color:red; }
+
 .go-back { color:#58A80A; font-size:16pt; }
 
 .go-back img { height:25px; margin-bottom:-6px; }
 
-#ads { display:block; position:absolute; bottom:0; }
+#ads { display:block; margin-top:50px; text-align:center; }
+
+option {padding:10px;}

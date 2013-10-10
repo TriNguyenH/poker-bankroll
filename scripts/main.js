@@ -1,5 +1,7 @@
 /************************************************************
  * My Poker Bankroll                                        *
+ * Created by Tri Nguyen                                    *
+ * http://triapp.co                                         *
  ***********************************************************/
 $(function() {
 
@@ -7,30 +9,10 @@ $(function() {
 
     deviceready();
 
-    getCurrentSession();
+    displayBalance();
 
-    $('#btnCalculate').on("click", function(e) {
+    if ($('#tblTransactions').length > 0) displayTransactions();
 
-        $subtotal = 0;
-
-        try { $subtotal = parseFloat($("#subtotal").val()); }
-        catch (err) { $subtotal = 0; }
-
-        if ($subtotal > 0) {
-
-            $num_people = parseInt($("#number_of_participant").val());
-
-            $each = $subtotal / $num_people;
-
-            $("#span10").html("$" + Math.round(($subtotal * 1.10) / $num_people * 100) / 100);
-
-            $("#span15").html("$" + Math.round(($subtotal * 1.15) / $num_people * 100) / 100);
-
-            $("#span18").html("$" + Math.round(($subtotal * 1.18) / $num_people * 100) / 100);
-
-            $(".result").css("display", "block");
-        }
-    });
 });
 
 function deviceready() {
@@ -49,19 +31,39 @@ function setupDB(tx) {
 }
 
 function errorHandler(e) {
-    alert(e.message);
+    //alert(e.message);
+    return false;
 }
 
+/******************************************************
+ * At this point, we know that local database exist
+*******************************************************/
 function dbReady() {
 
     $('#btnAddTransaction').on("click", function(e) {
-        db.transaction(function(tx) {
-            var d = new Date();
-            d.setDate(d.getDate() - randRange(1, 30));
-            var amount = parseFloat($('#amount').val());
-            var description = "test";
-            tx.executeSql("insert into transactions(amount, type) value(?,?,?)", [amount, description]);
-        }, errorHandler, function() { alert("added"); });
+        $amount = 0;
+
+        $description = $('#type').val();
+
+        try { $amount = parseFloat($('#amount').val()); }
+        catch (err) { $amount = 0; }
+
+        if ($amount > 0) {
+            // Insert new transaction into the database
+            db.transaction(function(tx) {
+                var d = new Date();
+                tx.executeSql("insert into transactions(amount, type, created) values(?,?,?)", [$amount, $description, d]);
+            }, errorHandler, function() {
+                $object = $('#message');
+                $object.removeClass('error').addClass('success');
+                $object.html('Transaction has been added.');
+            });
+        }
+        else {
+            $object = $('#message');
+            $object.removeClass('success').addClass('error');
+            $object.html('Enter all required fields.');
+        }
     });
 
     $('#clearButton').on("touchstart", function(e) {
@@ -95,62 +97,6 @@ function gotLog(tx, results) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getCurrentSession() {
-    $hasCurrentSession = true;
-    
-    //Get current session
-    if ($hasCurrentSession == true) {
-
-        $transaction = $("#transaction");
-        $transaction.addClass("active");
-        $transaction.html("Session started on 1/1/1900 12:00 PM");
-        $transaction.show();
-        
-        $transaction = $("#li_session");
-
-        $transaction.removeClass('add');
-
-        $transaction.addClass('close');
-        $transaction.addClass('stop');
-
-        $transaction.find("a").first().text("Stop Current Session");
-    }
-}
-
-function addFund() {
-    alert("Fund added");
-}
-
-function startSession() {
-
-}
-
-function stopSession() {
-
-}
-
 function displayBalance() {
 
 }
@@ -163,6 +109,73 @@ function displaySessions() {
 
 }
 
-function displayTransactions() {
+function removeRecord(type, id, element) {
+    var removed = false;
 
+    switch (type) {
+        case "transaction":
+            db.transaction(function(tx) {
+                tx.executeSql("delete from transactions WHERE id = " + id);
+            }, errorHandler, function() {
+                //remove the row
+                $row = $(element).parent().parent();
+                $row.remove();
+
+                $object = $('#message');
+                $object.removeClass('error').addClass('success');
+                $object.html('You have removed a record with id ' + id);
+            });
+            break;
+
+        case "session":
+
+            break;
+
+        default:
+
+            break;
+    }
+
+    return removed;
+}
+
+function displayTransactions() {
+    db.transaction(function(tx) {
+        tx.executeSql("select * from transactions order by created desc", [],
+        function(tx, results) {
+            if (results.rows.length == 0) {
+                return false;
+            }
+
+            $table = $('#tblTransactions');
+
+            for (var i = 0; i < results.rows.length; i++) {
+
+                var d = new Date(results.rows.item(i).created);
+
+                $table.append('<tr class="' + (i % 2 == 0 ? 'bgcolor0' : 'bgcolor1') + '">' +
+                                '<td class="action"><img src="images/delete.png" onclick="removeRecord(\'transaction\',' + results.rows.item(i).id + ', this);" /></td>' +
+                                '<td class="date" >' + d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear() + '</td>' +
+                                '<td>' + results.rows.item(i).type + '</td>' +
+                                '<td class="right">' + formatCurrency(results.rows.item(i).amount) + '</td>' +
+                              '</tr>');
+            }
+
+            $("#result").html(s);
+        }
+    , errorHandler);
+    }, errorHandler, function() { });
+}
+
+function formatCurrency(amount) {
+    var strFormatted = "";
+
+    $amount = 0;
+
+    try { $amount = parseFloat(amount); }
+    catch (err) { $amount = 0; }
+
+    strFormatted = "$" + $amount.toFixed(2); 
+
+    return strFormatted;
 }
