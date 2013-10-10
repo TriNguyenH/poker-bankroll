@@ -169,7 +169,7 @@ table tr th
 }
 
 table tr th.action, table tr td.action { width:35px!important; padding-left:10px; }
-table tr td.action img {margin-bottom:-4px;}
+table tr td.action img {margin-bottom:-4px; height:20px;}
 
 table tr th.date, table tr td.date { width:15%; text-align:right; padding-right:15px; }
 
@@ -185,7 +185,7 @@ table tr td.right { text-align:right; }
 
 .bgcolor0 { background-color:#fff; }
 
-.bgcolor1 { background-color:Gray; }
+.bgcolor1 { background-color:#dde1c2; }
 
 .button
 {
@@ -214,8 +214,16 @@ table tr td.right { text-align:right; }
 .error
 {
     display:block;
-    margin:10px 0 10px 0;
+    margin:10px 0 20px 0;
     color:red;
+    background-color:#fff;
+    padding:10px;
+}
+
+.success
+{
+    display:block;
+    margin:10px 0 20px 0;
     background-color:#fff;
     padding:10px;
 }

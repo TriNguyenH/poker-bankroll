@@ -13,6 +13,8 @@ $(function() {
 
     if ($('#tblTransactions').length > 0) displayTransactions();
 
+    if ($('#tblSessions').length > 0) displaySessions();
+
 });
 
 function deviceready() {
@@ -43,7 +45,7 @@ function dbReady() {
     $('#btnAddTransaction').on("click", function(e) {
         $amount = 0;
 
-        $description = $('#type').val();
+        $type = $('#type').val();
 
         try { $amount = parseFloat($('#amount').val()); }
         catch (err) { $amount = 0; }
@@ -52,11 +54,12 @@ function dbReady() {
             // Insert new transaction into the database
             db.transaction(function(tx) {
                 var d = new Date();
-                tx.executeSql("insert into transactions(amount, type, created) values(?,?,?)", [$amount, $description, d]);
+                tx.executeSql("insert into transactions(amount, type, created) values(?,?,?)", [$amount, $type, d]);
             }, errorHandler, function() {
                 $object = $('#message');
                 $object.removeClass('error').addClass('success');
                 $object.html('Transaction has been added.');
+                $('#amount').val('');
             });
         }
         else {
@@ -66,12 +69,42 @@ function dbReady() {
         }
     });
 
-    $('#clearButton').on("touchstart", function(e) {
-        db.transaction(function(tx) {
-            tx.executeSql("delete from log");
-        }, errorHandler, function() { $("#result").html("Cleared all rows."); });
-    });
+    $('#btnAddSession').on("click", function(e) {
+        $amount = 0;
+        $hours = 0;
+        $date = new Date();
+        $location = $('#location').val();
 
+        try { $amount = parseFloat($('#amount').val()); }
+        catch (err) { $amount = 0; }
+
+        try { $hours = parseFloat($('#hours').val()); }
+        catch (err) { $hours = 0; }
+
+        try { $date = new Date($('#date').val()); }
+        catch (err) { $date = new Date(); }
+
+        if ($amount > 0) {
+            // Insert new session into the database
+            db.transaction(function(tx) {
+                var d = new Date();
+                tx.executeSql("insert into sessions(location, start_date, hours, amount) values(?,?,?,?)", [$location, $date, $hours, $amount]);
+            }, errorHandler, function() {
+                $object = $('#message');
+                $object.removeClass('error').addClass('success');
+                $object.html('Session has been added.');
+                $('#amount').val('');
+                $('#hours').val('');
+                $('#location').val('');
+            });
+        }
+        else {
+            $object = $('#message');
+            $object.removeClass('success').addClass('error');
+            $object.html('Enter all required fields.');
+        }
+    });
+    
     $("#ShowButton").on("touchstart", function(e) {
         db.transaction(function(tx) {
             tx.executeSql("select * from log order by created desc", [], gotLog, errorHandler);
@@ -106,7 +139,30 @@ function displayStatistics() {
 }
 
 function displaySessions() {
+    db.transaction(function(tx) {
+        tx.executeSql("select * from sessions order by start_date desc", [],
+        function(tx, results) {
+            if (results.rows.length == 0) {
+                return false;
+            }
 
+            $table = $('#tblSessions');
+
+            for (var i = 0; i < results.rows.length; i++) {
+
+                var d = new Date(results.rows.item(i).start_date);
+
+                $table.append('<tr class="' + (i % 2 == 0 ? 'bgcolor0' : 'bgcolor1') + '">' +
+                                '<td class="action"><img src="images/delete.png" onclick="removeRecord(\'session\',' + results.rows.item(i).id + ', this);" /></td>' +
+                                '<td class="date" >' + d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear() + '</td>' +
+                                '<td>' + results.rows.item(i).location + '</td>' +
+                                '<td class="right">' + results.rows.item(i).hours + '</td>' +
+                                '<td class="right">' + formatCurrency(results.rows.item(i).amount) + '</td>' +
+                              '</tr>');
+            }
+        }
+    , errorHandler);
+    }, errorHandler, function() { });
 }
 
 function removeRecord(type, id, element) {
@@ -123,12 +179,22 @@ function removeRecord(type, id, element) {
 
                 $object = $('#message');
                 $object.removeClass('error').addClass('success');
-                $object.html('You have removed a record with id ' + id);
+                $object.html('You have removed a record with id = ' + id);
             });
             break;
 
         case "session":
+            db.transaction(function(tx) {
+                tx.executeSql("delete from sessions WHERE id = " + id);
+            }, errorHandler, function() {
+                //remove the row
+                $row = $(element).parent().parent();
+                $row.remove();
 
+                $object = $('#message');
+                $object.removeClass('error').addClass('success');
+                $object.html('You have removed a record with id = ' + id);
+            });
             break;
 
         default:
@@ -160,8 +226,6 @@ function displayTransactions() {
                                 '<td class="right">' + formatCurrency(results.rows.item(i).amount) + '</td>' +
                               '</tr>');
             }
-
-            $("#result").html(s);
         }
     , errorHandler);
     }, errorHandler, function() { });

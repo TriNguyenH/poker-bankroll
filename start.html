@@ -13,16 +13,21 @@
     
         <h2>Add a Session</h2>
         
+        <div id="message"></div>
+        
         <h4>Date:</h4>
         <input type="text" id="date" class="field" style="width:30%!important;" />
                 
         <h4>Amount:</h4>
         <input type="text" id="amount" class="field" style="width:30%!important;" />
-                
+
+        <h4>Hours:</h4>
+        <input type="text" id="hours" class="field" style="width:30%!important;" />
+        
         <h4>Location:</h4>
         <input type="text" id="location" class="field" />
         
-        <p><input type="button" id="btnAddSession" value="ADD" class="button" /></p>
+        <p><input type="button" id="btnAddSession" value="ADD SESSION" class="button" /></p>
     
         <a href="index.html" class="go-back"><img src="images/previous.png" /> Go Back</a>
         
@@ -35,6 +40,11 @@
             google_ad_slot = "4214173975";
             google_ad_width = 320;
             google_ad_height = 50;
+
+            $(function() {
+                var d = new Date();
+                $('#date').val(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
+            });
         //-->
         </script>
         <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
