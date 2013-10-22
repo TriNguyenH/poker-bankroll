@@ -9,7 +9,7 @@ $(function() {
 
     deviceready();
 
-    displayBalance();
+    if ($('#balance').length > 0) displayBalance();
 
     if ($('#tblTransactions').length > 0) displayTransactions();
 
@@ -47,10 +47,13 @@ function dbReady() {
 
         $type = $('#type').val();
 
-        try { $amount = parseFloat($('#amount').val()); }
+        try { $amount = Math.abs(parseFloat($('#amount').val())); }
         catch (err) { $amount = 0; }
 
         if ($amount > 0) {
+
+            if ($type == "Withdrawal") { $amount = $amount * -1; }
+
             // Insert new transaction into the database
             db.transaction(function(tx) {
                 var d = new Date();
@@ -75,16 +78,18 @@ function dbReady() {
         $date = new Date();
         $location = $('#location').val();
 
-        try { $amount = parseFloat($('#amount').val()); }
+        try { $amount = Math.abs(parseFloat($('#amount').val())); }
         catch (err) { $amount = 0; }
 
-        try { $hours = parseFloat($('#hours').val()); }
+        try { $hours = Math.abs(parseFloat($('#hours').val())); }
         catch (err) { $hours = 0; }
 
         try { $date = new Date($('#date').val()); }
         catch (err) { $date = new Date(); }
 
         if ($amount > 0) {
+            if ($('#status').val() == "Loss") { $amount = $amount * -1; }
+            
             // Insert new session into the database
             db.transaction(function(tx) {
                 var d = new Date();
@@ -104,38 +109,60 @@ function dbReady() {
             $object.html('Enter all required fields.');
         }
     });
-    
-    $("#ShowButton").on("touchstart", function(e) {
-        db.transaction(function(tx) {
-            tx.executeSql("select * from log order by created desc", [], gotLog, errorHandler);
-        }, errorHandler, function() { });
+}
+
+function displayBalance() {
+    db.transaction(function(tx) {
+
+        $sessionTotal = 0;
+        $transactionTotal = 0;
+
+        //Get Session Total = win - loss
+        tx.executeSql("select SUM(amount) as total from sessions", [],
+        function(tx, results) {
+            if (results.rows.length == 0) {
+                return false;
+            }
+
+            $sessionTotal = parseFloat(results.rows.item(0).total);
+        }
+        , errorHandler);
+
+        //Get Session Total = win - loss
+        tx.executeSql("select SUM(amount) as total from transactions", [],
+        function(tx, results) {
+            if (results.rows.length == 0) {
+                return false;
+            }
+            $transactionTotal = parseFloat(results.rows.item(0).total);
+        }
+        , errorHandler);
+
+    }, errorHandler, function() {
+        $("#balance").html("BALANCE: " + formatCurrency($sessionTotal + $transactionTotal));
     });
 }
 
-function gotLog(tx, results) {
-    if (results.rows.length == 0) {
-        $("#result").html("No data.");
-        return false;
-    }
+function getTransactionalBalance() {
+    $amount = 0;
 
-    var s = "";
+    db.transaction(function(tx) {
+        tx.executeSql("select * from transactions", [],
+        function(tx, results) {
+            if (results.rows.length == 0) {
+                return amount;
+            }
 
-    for (var i = 0; i < results.rows.length; i++) {
-        var d = new Date();
-        d.setTime(results.rows.item(i).created);
-        s += d.toDateString() + " " + d.toTimeString() + "<br/>";
-    }
+            $table = $('#tblSessions');
 
-    $("#result").html(s);
-}
+            for (var i = 0; i < results.rows.length; i++) {
 
+            }
+        }
+    , errorHandler);
+    }, errorHandler, function() { });
 
-function displayBalance() {
-
-}
-
-function displayStatistics() {
-
+    return $amount;
 }
 
 function displaySessions() {
@@ -156,7 +183,7 @@ function displaySessions() {
                                 '<td class="action"><img src="images/delete.png" onclick="removeRecord(\'session\',' + results.rows.item(i).id + ', this);" /></td>' +
                                 '<td class="date" >' + d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear() + '</td>' +
                                 '<td>' + results.rows.item(i).location + '</td>' +
-                                '<td class="right">' + results.rows.item(i).hours + '</td>' +
+                                '<td class="right">' + results.rows.item(i).hours + ' hrs</td>' +
                                 '<td class="right">' + formatCurrency(results.rows.item(i).amount) + '</td>' +
                               '</tr>');
             }
@@ -236,10 +263,19 @@ function formatCurrency(amount) {
 
     $amount = 0;
 
-    try { $amount = parseFloat(amount); }
+    try { $amount = Math.abs(parseInt(amount)); }
     catch (err) { $amount = 0; }
 
-    strFormatted = "$" + $amount.toFixed(2); 
+    strFormatted = $amount.toFixed(0);
 
+    switch (strFormatted.length) {
+        case 4: case 5: case 6:
+            strFormatted = (amount < 0 ? "-" : "") + "$" + strFormatted.substring(0, strFormatted.length - 3) + "," + strFormatted.substring(strFormatted.length-3, strFormatted.length);
+            break;
+        default:
+            strFormatted = (amount < 0 ? "-" : "") + "$" + strFormatted;
+            break;
+    }
+    
     return strFormatted;
 }
